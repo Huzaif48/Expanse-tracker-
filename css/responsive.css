@@ -1,0 +1,123 @@
+/* =========================================================
+   MetaCraft — Global Responsive Foundation
+   Loaded by every page BEFORE the page stylesheet.
+   Page-specific layout lives in the page stylesheet;
+   only cross-cutting rules belong here.
+   ========================================================= */
+
+:root {
+    --mc-purple: #966AAD;
+    --mc-purple-light: #c79acd;
+    --mc-pink: #FAD8F8;
+    --mc-accent: #A56BFF;
+    --mc-bg: #0b0a0f;
+    --mc-bg-deep: #090712;
+    --mc-border: #a56dde;
+
+    /* Fixed navbar height (index / about) */
+    --mc-nav-h: 4.5rem;
+    /* Fixed mobile header height (dashboard / history) */
+    --mc-mobile-header-h: 60px;
+
+    /* Fluid spacing + max width */
+    --mc-gutter: clamp(1rem, 4vw, 2rem);
+    --mc-max-width: 1200px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--mc-nav-h) + 1rem);
+}
+
+body {
+    max-width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+/* Media never spills out of its column */
+img,
+svg,
+video,
+canvas,
+iframe {
+    max-width: 100%;
+}
+
+img,
+video {
+    height: auto;
+}
+
+/* Long words / emails must not create a sideways scrollbar */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+td,
+th,
+dd,
+dt,
+label,
+span,
+a,
+strong {
+    overflow-wrap: break-word;
+}
+
+/* Inputs inherit typography — also prevents iOS zoom-on-focus */
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: max(1rem, 16px);
+    max-width: 100%;
+}
+
+/* Anchor jumps clear the fixed navbar */
+[id] {
+    scroll-margin-top: calc(var(--mc-nav-h) + 1rem);
+}
+
+/* Scrollable regions instead of page-level overflow */
+.table-wrapper,
+.scroll-x {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Keyboard focus stays visible */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--mc-purple-light);
+    outline-offset: 3px;
+}
+
+/* Respect users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

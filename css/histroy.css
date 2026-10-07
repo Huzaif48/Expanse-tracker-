@@ -1,0 +1,713 @@
+:root {
+  --gap: clamp(0.75rem, 2vw, 1.5rem);
+  --panel-pad: clamp(1rem, 3vw, 2.5rem);
+  --sidebar-w: 250px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  color: #c3b1e1;
+  list-style: none;
+  text-decoration: none;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-color: #0b0a0f;
+  /* deep black */
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+p,
+span,
+li,
+td,
+th,
+label,
+a,
+strong {
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   Layout shell
+   ========================================================= */
+.page-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap);
+  width: 100%;
+  padding: var(--gap);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Mobile Header */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--mc-mobile-header-h, 60px);
+  padding: 0 12px;
+  background: rgba(11, 10, 15, 0.92);
+  /* semi-transparent black */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(130, 76, 160, 0.3);
+  /* subtle purple border */
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  z-index: 1001;
+}
+
+.mobile-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mobile-header .brand span {
+  font-size: clamp(0.85rem, 3.5vw, 1.1rem);
+  font-weight: 800;
+  color: #a56dde;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-header img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mobile-header button {
+  background: transparent;
+  border: none;
+  color: #a56dde;
+  /* purple */
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   Sidebar — sticky column on desktop, drawer on small screens
+   ========================================================= */
+.sidebar {
+  flex: 0 0 var(--sidebar-w);
+  width: var(--sidebar-w);
+  max-width: 100%;
+  background-color: #0b0a0f;
+  /* black */
+  border-radius: 15px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+  position: sticky;
+  top: var(--gap);
+  align-self: flex-start;
+  height: calc(100vh - (2 * var(--gap)));
+  height: calc(100dvh - (2 * var(--gap)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 10px;
+  z-index: 1002;
+}
+
+.sidebar-close {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid rgba(165, 109, 222, 0.35);
+  border-radius: 50%;
+  color: #a56dde;
+  font-size: 24px;
+  cursor: pointer;
+  place-items: center;
+}
+
+#profileImage {
+  width: clamp(70px, 18vw, 100px);
+  height: clamp(70px, 18vw, 100px);
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+  filter: drop-shadow(0 0 10px #a56dde);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.name {
+  padding-top: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: clamp(0.95rem, 3.2vw, 1.125rem);
+  font-weight: 900;
+  color: #c3b1e1;
+  overflow-wrap: anywhere;
+}
+
+.nav-links {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+}
+
+.linkbtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  color: #c3b1e1;
+  font-size: 0.95rem;
+}
+
+.linkbtn i {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.link_name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.linkbtn:hover {
+  background-color: #130f1f;
+  /* dark purple hover */
+  transform: scale(1.05);
+}
+
+.btm-img {
+  width: clamp(50px, 14vw, 80px);
+  height: clamp(50px, 14vw, 80px);
+  overflow: hidden;
+  object-fit: contain;
+}
+
+.nav-links > li:last-child h3 {
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: #a56dde;
+}
+
+/* =========================================================
+   Main content panel
+   ========================================================= */
+.container {
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  height: calc(100vh - (2 * var(--gap)));
+  height: calc(100dvh - (2 * var(--gap)));
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--panel-pad);
+  background-color: #1a122c33;
+  /* transparent dark purple overlay */
+  box-shadow: 0 0 10px #a56dde, inset 0 0 10px #7b4ab2;
+  border-radius: 10px;
+}
+
+.container > * {
+  width: 100%;
+  max-width: 900px;
+}
+
+.container h1 {
+  color: #a56dde;
+  font-size: clamp(1.35rem, 4.5vw, 2rem);
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+/* =========================================================
+   Table
+   ========================================================= */
+.table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #0b0a0f;
+  /* black */
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #a56dde;
+  text-align: center;
+  color: #c3b1e1;
+  font-size: clamp(0.8rem, 2.2vw, 0.95rem);
+  overflow-wrap: anywhere;
+}
+
+th {
+  background: #a56dde33;
+  /* light purple overlay */
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ctr-btn {
+  padding: 6px 12px;
+  background: #3b1f5a;
+  /* deep purple */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.ctr-btn:hover {
+  background: #5a33a0;
+  /* brighter purple hover */
+}
+
+.delete-button {
+  position: relative;
+  padding: 0.5em;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1em;
+  transition: transform 0.2s ease;
+}
+
+.trash-svg {
+  width: 2.3em;
+  height: 2.3em;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 2px 4px rgba(165, 109, 222, 0.4));
+  overflow: visible;
+}
+
+#lid-group {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.delete-button:hover #lid-group {
+  transform: rotate(-28deg) translateY(2px);
+}
+
+.delete-button:active #lid-group {
+  transform: rotate(-12deg) scale(0.98);
+}
+
+.delete-button:hover .trash-svg {
+  transform: scale(1.08) rotate(3deg);
+}
+
+.delete-button:active .trash-svg {
+  transform: scale(0.96) rotate(-1deg);
+}
+
+#totals {
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: center;
+  color: #a56dde;
+  font-size: clamp(0.85rem, 2.6vw, 1rem);
+  overflow-wrap: anywhere;
+}
+
+/* Chart — a sized wrapper is what Chart.js needs to resize correctly */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: clamp(200px, 62vw, 340px);
+  margin: clamp(1.5rem, 4vw, 2rem) auto 0;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  display: block;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 1000;
+}
+
+/* =========================================================
+   Responsive Layout
+   ========================================================= */
+
+/* --- Desktop: give the panel a bit more room --- */
+@media (min-width: 1500px) {
+  :root {
+    --sidebar-w: 280px;
+  }
+}
+
+/* --- Tablet & below: sidebar becomes an off-canvas drawer --- */
+@media (max-width: 992px) {
+  .mobile-header {
+    display: flex;
+  }
+
+  .page-wrapper {
+    display: block;
+    padding: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(280px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0 15px 15px 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: calc(var(--mc-mobile-header-h, 60px) + 8px) 8px 20px;
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.5);
+    background: #0b0a0f;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close {
+    display: grid;
+  }
+
+  .nav-links {
+    align-items: stretch;
+    padding: 0 6px;
+    gap: 6px;
+  }
+
+  /* The page itself scrolls — no nested scroll areas on touch */
+  .container {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    width: 100%;
+    margin: 0;
+    padding: var(--panel-pad);
+    padding-top: calc(var(--mc-mobile-header-h, 60px) + 1.25rem);
+    border-radius: 0;
+  }
+}
+
+/* --- Tablet: table still fits, just tighter --- */
+@media (max-width: 900px) and (min-width: 701px) {
+  th,
+  td {
+    padding: 8px 6px;
+  }
+}
+
+/* --- Phone: the table turns into stacked cards --- */
+@media (max-width: 700px) {
+  .container {
+    --panel-pad: 1rem;
+  }
+
+  .table-wrapper {
+    margin-top: 0.75rem;
+  }
+
+  #historyTable,
+  #historyTable tbody,
+  #historyTable tr,
+  #historyTable td {
+    display: block;
+    width: 100%;
+  }
+
+  #historyTable thead {
+    display: none;
+    /* screen-reader only: keeps the column meaning available */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  #historyTable {
+    background: transparent;
+    border-radius: 0;
+  }
+
+  #historyTable tr {
+    background: #0b0a0f;
+    border: 1px solid rgba(165, 109, 222, 0.35);
+    border-radius: 14px;
+    margin-bottom: 0.85rem;
+    padding: 0.35rem 0;
+    box-shadow: 0 0 10px #7b4ab2;
+  }
+
+  #historyTable tr:last-child {
+    margin-bottom: 0;
+  }
+
+  #historyTable td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 0.9rem;
+    border: none;
+    border-bottom: 1px dashed rgba(165, 109, 222, 0.22);
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  #historyTable td:last-child {
+    border-bottom: none;
+    justify-content: flex-end;
+  }
+
+  /* Empty-state row should not look like a labelled field */
+  #historyTable td[colspan] {
+    justify-content: center;
+    text-align: center;
+    border-bottom: none;
+  }
+
+  #historyTable td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #a56dde;
+    text-align: left;
+    flex: 0 0 auto;
+  }
+
+  #historyTable td[colspan]::before {
+    content: none;
+  }
+
+  .delete-button {
+    padding: 0.35em;
+    font-size: 1.05rem;
+  }
+}
+
+/* --- Small phone --- */
+@media (max-width: 400px) {
+  .sidebar {
+    width: min(260px, 88vw);
+  }
+
+  .chart-container {
+    height: clamp(180px, 70vw, 260px);
+  }
+
+  .ctr-btn {
+    width: 100%;
+    font-size: 15px;
+  }
+}
+
+/* --- Landscape phone --- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .chart-container {
+    height: 180px;
+  }
+}
+
+/* --- Touch devices: no sticky hover transforms --- */
+@media (hover: none) {
+  .linkbtn:hover {
+    transform: none;
+    background-color: inherit;
+  }
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}
+
+/* From Uiverse.io by TomMussard */
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 0 0 10px #966aad;
+  background-color: #090712;
+}
+
+/* plus sign */
+.sign {
+  width: 100%;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 17px;
+}
+
+.sign svg path {
+  fill: #966aad;
+}
+
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  font-weight: 600;
+  transition-duration: .3s;
+}
+
+/* hover effect on button width */
+.Btn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 20px;
+}
+
+/* hover effect button's text */
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 10px;
+}
+
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px, 2px);
+}
+
+#actions {
+  text-align: center;
+  margin-top: 30px;
+  display: flex;
+  gap: clamp(0.75rem, 3vw, 1rem);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ctr-btn {
+  color: #a56dde;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 0.5em;
+  background: #0b0a0f;
+  border: 2px solid #a56dde;
+  box-shadow: 0 0 10px #7b4ab2;
+  transition: all 0.3s ease;
+}
+
+.ctr-btn:hover {
+  color: #0b0a0f;
+  background-color: #a56dde;
+}
+
+.ctr-btn:active {
+  transform: scale(0.95);
+}

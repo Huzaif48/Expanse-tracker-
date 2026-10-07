@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Background + Base Text */
+body {
+  background-color: #0B0A0F; /* Deep black */
+  color: #E6DFF1; /* Soft lavender */
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Fluid breathing room + safe-area insets for notched phones */
+  padding: clamp(1rem, 5vw, 2.5rem);
+  padding-top: max(clamp(1rem, 5vw, 2.5rem), env(safe-area-inset-top));
+  padding-bottom: max(clamp(1rem, 5vw, 2.5rem), env(safe-area-inset-bottom));
+}
+
+/* Card wrapper — flex centring above, so no absolute positioning.
+   `position: relative` keeps it above the fixed animated background. */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 360px;
+  margin: auto;
+  min-width: 0;
+}
+
+/* Form */
+form {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-width: 100%;
+  padding: clamp(1.75rem, 6vw, 2.5rem) clamp(1.25rem, 5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 3.5vw, 1.4rem);
+  text-align: center;
+  background-color: #1410202b; /* Blackish with purple tint */
+  border: 1px solid #7A3CC2; /* Vibrant purple */
+  border-radius: 20px;
+  box-shadow: 0 0 30px #7A3CC2, inset 0 0 20px #7A3CC2;
+}
+
+form h2 {
+  margin-bottom: 0.25rem;
+  font-size: clamp(1.15rem, 5.5vw, 1.5rem);
+  line-height: 1.3;
+  color: #A56BFF; /* Bright purple */
+}
+
+/* Field groups */
+.field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  min-width: 0;
+}
+
+form label {
+  color: #A56BFF;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Inputs */
+form input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.5rem 0.25rem;
+  border: none;
+  border-bottom: 1px solid #7A3CC2;
+  background-color: transparent;
+  text-align: center;
+  color: #E6DFF1;
+  transition: all 0.3s ease;
+}
+
+form input::placeholder {
+  color: #7A3CC2;
+  opacity: 0.75;
+  font-size: 0.8rem;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 3px solid #A56BFF;
+  transform: translateY(-2px);
+}
+
+/* Password field + show/hide toggle */
+.password-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.password-wrap input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+/* Icons */
+.bx-show {
+  color: #A56BFF;
+}
+
+.bx-hide {
+  color: #4C3D60;
+}
+
+#eye {
+  position: absolute;
+  right: 0.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  transition: all 0.3s ease;
+  color: #A56BFF;
+}
+
+#eye:hover {
+  scale: 1.2;
+}
+
+/* Gender Section */
+.gender {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.gender legend {
+  color: #A56BFF;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+
+.gender-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 4vw, 2rem);
+}
+
+.gender-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+input[type="radio"] {
+  accent-color: #A56BFF;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Submit Button */
+.submit {
+  width: min(100%, 160px);
+  max-width: 100%;
+  height: 44px;
+  margin-top: 0.25rem;
+  border: 1px solid #7A3CC2;
+  border-radius: 15px;
+  color: #A56BFF;
+  z-index: 1;
+  background: #0B0A0F;
+  position: relative;
+  font-weight: 700;
+  font-size: 17px;
+  -webkit-box-shadow: 4px 8px 19px -3px #7A3CC2;
+  box-shadow: 4px 8px 19px -3px #7A3CC2;
+  transition: all 250ms;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-radius: 15px;
+  background-color: #A56BFF;
+  z-index: -1;
+  transition: all 250ms;
+}
+
+.submit:hover {
+  color: #0B0A0F;
+  transform: scale(1.05);
+}
+
+.submit:hover::before {
+  width: 100%;
+}
+
+/* Account link */
+.have-account {
+  color: #A56BFF;
+  font-size: 14px;
+  margin: 0;
+  max-width: 28ch;
+}
+
+.have-account a {
+  color: #E6DFF1;
+  transition: all 0.3s ease;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+/* --- Small phone --- */
+@media (max-width: 380px) {
+  form {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+
+  form h2 {
+    font-size: 1.05rem;
+  }
+
+  .submit {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .have-account {
+    font-size: 13px;
+  }
+
+  .gender-options {
+    gap: 0.75rem;
+  }
+}
+
+/* --- Short screens: let the page scroll instead of clipping the card --- */
+@media (max-height: 700px) {
+  body {
+    align-items: flex-start;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  form {
+    box-shadow: 0 0 20px #7A3CC2, inset 0 0 12px #7A3CC2;
+  }
+}
+
+/* --- Touch devices: no sticky hover scale --- */
+@media (hover: none) {
+
+  .submit:hover,
+  #eye:hover {
+    transform: none;
+    scale: 1;
+  }
+}
+
+/* Background Balls */
+@keyframes move {
+  100% {
+    transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+.background {
+  position: fixed;
+  inset: 0;
+  /* 100vw/100vh include the scrollbar and can cause sideways scroll */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background: #000000;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ball {
+  position: absolute;
+  width: 20vmin;
+  height: 20vmin;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  animation: move linear infinite;
+}
+
+.ball:nth-child(odd) {
+  color: #4C3D60; /* Dark purple */
+}
+
+.ball:nth-child(even) {
+  color: #A56BFF55; /* Soft glowing purple */
+}
+
+/* Ball positions */
+.ball:nth-child(1) {
+  top: 77%;
+  left: 88%;
+  animation-duration: 40s;
+  animation-delay: -3s;
+  transform-origin: 16vw -2vh;
+  box-shadow: 40vmin 0 6vmin currentColor;
+}
+
+.ball:nth-child(2) {
+  top: 42%;
+  left: 2%;
+  animation-duration: 53s;
+  animation-delay: -29s;
+  transform-origin: -19vw 21vh;
+  box-shadow: -40vmin 0 5vmin currentColor;
+}
+
+.ball:nth-child(3) {
+  top: 28%;
+  left: 18%;
+  animation-duration: 49s;
+  animation-delay: -8s;
+  transform-origin: -22vw 3vh;
+  box-shadow: 40vmin 0 5vmin currentColor;
+}
+
+.ball:nth-child(4) {
+  top: 50%;
+  left: 79%;
+  animation-duration: 26s;
+  animation-delay: -21s;
+  transform-origin: -17vw -6vh;
+  box-shadow: 40vmin 0 5vmin currentColor;
+}
+
+.ball:nth-child(5) {
+  top: 46%;
+  left: 15%;
+  animation-duration: 36s;
+  animation-delay: -40s;
+  transform-origin: 4vw 0vh;
+  box-shadow: -40vmin 0 6vmin currentColor;
+}
+
+.ball:nth-child(6) {
+  top: 77%;
+  left: 16%;
+  animation-duration: 31s;
+  animation-delay: -10s;
+  transform-origin: 18vw 4vh;
+  box-shadow: 40vmin 0 5vmin currentColor;
+}
+
+.ball:nth-child(7) {
+  top: 22%;
+  left: 17%;
+  animation-duration: 55s;
+  animation-delay: -6s;
+  transform-origin: 1vw -23vh;
+  box-shadow: -40vmin 0 6vmin currentColor;
+}
+
+.ball:nth-child(8) {
+  top: 41%;
+  left: 47%;
+  animation-duration: 43s;
+  animation-delay: -28s;
+  transform-origin: 25vw -3vh;
+  box-shadow: 40vmin 0 5vmin currentColor;
+}
+
+.ball:nth-child(9) {
+  top: 51%;
+  left: 33%;
+  animation-duration: 43s;
+  animation-delay: -28s;
+  transform-origin: 25vw -3vh;
+  box-shadow: 40vmin 0 5vmin currentColor;
+}
+
+.ball:nth-child(10) {
+  top: 36%;
+  left: 17%;
+  animation-duration: 43s;
+  animation-delay: -28s;
+  transform-origin: 25vw -3vh;
+  box-shadow: 40vmin 0 5vmin currentColor;
+}
