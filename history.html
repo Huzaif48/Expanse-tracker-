@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link rel="shortcut icon" href="image/m-craft.png" type="image/x-icon">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!--for font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!--for boxicons-->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/histroy.css">
+</head>
+
+<body>
+
+    <!-- MOBILE HEADER -->
+    <header class="mobile-header" id="mobileHeader">
+        <button id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+            <i class='bx bx-menu' id="menuIcon"></i>
+        </button>
+        <div class="brand">
+            <img src="image/meta.png" alt="MetaCraft logo">
+            <span>ᗰETᗩᑕᖇᗩᖴT</span>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+        <div class="sidebar" id="sidebar" aria-hidden="true">
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+                <i class='bx bx-x'></i>
+            </button>
+            <div class="profile-details">
+                <img src="image/user.jpg" id="profileImage" alt="profile image">
+                <div class="name" id="welcome">John Doe</div>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="index.html" class="linkbtn">
+                        <i class='bx bxs-home' style="color: #a56dde;"></i>
+                        <span class="link_name">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html" class="linkbtn">
+                        <i class='bx bxs-dashboard' style="color: #a56dde;"></i>
+                        <span class="link_name">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="history.html" class="linkbtn">
+                        <i class='bx bx-history' style="color: #a56dde;"></i>
+                        <span class="link_name">History</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="about.html" class="linkbtn">
+                        <i class='bx bxs-user' style="color: #a56dde;"></i>
+                        <span class="link_name">About</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="linkbtn" onclick="logout()">
+                        <button class="Btn">
+                            <div class="sign">
+                                <svg viewBox="0 0 512 512" >
+                                    <path
+                                        d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="text">Logout</div>
+                        </button>
+                    </a>
+                </li>
+                <li style="margin-top: auto; padding-bottom: 10px;">
+                    <a href="#">
+                        <img src="image/meta.png" class="btm-img">
+                        <h3 style="color: #a56dde;">ᗰETᗩᑕᖇᗩᖴT</h3>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="overlay" id="overlay" hidden></div>
+
+        <main class="container" id="mainContainer">
+            <h1>Transaction History</h1>
+            <div id="totals">Total Income: $0 | Total Expense: $0</div>
+            <div class="table-wrapper">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="chart-container">
+                <canvas id="pieChart" aria-label="Income versus expense chart" role="img"></canvas>
+            </div>
+            <div id="actions">
+                <button class="ctr-btn" onclick="clearAll()">Clear All History</button>
+                <button class="ctr-btn" onclick="takeScreenshot()">Take Screenshot</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let allUsers = JSON.parse(localStorage.getItem("users")) || [];
+            let currentUser = null;
+            let loggedUserIndex = -1;
+
+            try {
+                currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+                if (!currentUser || !currentUser.email) throw new Error("Invalid User");
+
+                loggedUserIndex = allUsers.findIndex(user => user.email === currentUser.email);
+                if (loggedUserIndex === -1) throw new Error("User not found in localStorage.");
+
+                document.getElementById('welcome').innerText = `Hi, ${currentUser.name}`;
+
+                const profileImage = document.getElementById("profileImage");
+                if (currentUser.gender === "male") profileImage.src = "image/men.png";
+                else if (currentUser.gender === "female") profileImage.src = "image/women.png";
+                else profileImage.src = "image/user.jpg";
+
+            } catch (e) {
+                alert("Please login first.");
+                window.location.href = "MetacraftLogin.html";
+                return;
+            }
+
+            let history = allUsers[loggedUserIndex].history || [];
+            const tableBody = document.querySelector("#historyTable tbody");
+            const totalsDiv = document.getElementById("totals");
+            let pieChart;
+
+            function renderTable() {
+                tableBody.innerHTML = "";
+                let totalIncome = 0;
+                let totalExpense = 0;
+
+                if (history.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="6" data-label="">No transaction history available.</td></tr>`;
+                } else {
+                    history.forEach((entry, index) => {
+                        if (entry.type === "income") totalIncome += entry.amount;
+                        else totalExpense += entry.amount;
+
+                        const amountClass = entry.type === 'income' ? 'color: #4caf50;' : 'color: #f44336;';
+
+                        // data-label drives the stacked "card" layout on phones
+                        tableBody.innerHTML += `
+                            <tr>
+                                <td data-label="Date">${entry.date}</td>
+                                <td data-label="Description">${entry.description}</td>
+                                <td data-label="Category">${entry.category}</td>
+                                <td data-label="Type">${entry.type}</td>
+                                <td data-label="Amount" style="${amountClass}">$${entry.amount.toFixed(2)}</td>
+                                <td data-label="">
+                                   <button aria-label="Delete item" class="delete-button" onclick="deleteEntry(${index})">
+                                       <i class="fas fa-trash" style="color:#ff6900;"></i>
+                                   </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                totalsDiv.innerHTML = `Total Income: <span style="color: #4caf50;">$${totalIncome.toFixed(2)}</span> | Total Expense: <span style="color: #f44336;">$${totalExpense.toFixed(2)}</span>`;
+                renderPieChart(totalIncome, totalExpense);
+            }
+
+            function renderPieChart(income, expense) {
+                const ctx = document.getElementById("pieChart").getContext("2d");
+                if (pieChart) pieChart.destroy();
+                if (income === 0 && expense === 0) return;
+
+                pieChart = new Chart(ctx, {
+                    type: "pie",
+                    data: {
+                        labels: ["Income", "Expense"],
+                        datasets: [{
+                            data: [income, expense],
+                            backgroundColor: ["#4caf50", "#f44336"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#fad8f8'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            window.deleteEntry = function (index) {
+                if (confirm("Are you sure you want to delete this transaction?")) {
+                    history.splice(index, 1);
+                    allUsers[loggedUserIndex].history = history;
+                    localStorage.setItem("users", JSON.stringify(allUsers));
+                    renderTable();
+                }
+            }
+
+            window.clearAll = function () {
+                if (confirm("Are you sure you want to clear all transaction history?")) {
+                    history = [];
+                    allUsers[loggedUserIndex].history = [];
+                    localStorage.setItem("users", JSON.stringify(allUsers));
+                    renderTable();
+                }
+            }
+
+            window.takeScreenshot = function () {
+                const tableSection = document.querySelector("#historyTable");
+                if (!tableSection) {
+                    alert("Error: Could not find the table to capture.");
+                    console.error("Element with ID 'historyTable' not found.");
+                    return;
+                }
+
+                html2canvas(tableSection, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: "#ffffff"
+                }).then(canvas => {
+                    let link = document.createElement("a");
+                    link.download = "transaction_table.png";
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                }).catch(error => {
+                    alert("Error capturing screenshot. Check the console for details.");
+                    console.error("html2canvas error:", error);
+                });
+            };
+
+            window.downloadPDF = function () {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const tableSection = document.querySelector("#historyTable");
+
+                if (!tableSection) {
+                    alert("Error: Could not find the table to capture.");
+                    console.error("Element with ID 'historyTable' not found.");
+                    return;
+                }
+
+                doc.text("Transaction History", 10, 10); // Add title at the top
+                html2canvas(tableSection, {
+                    scale: 2, // Increase resolution for better quality
+                    useCORS: true, // Handle cross-origin images
+                    backgroundColor: "#ffffff" // Set a white background
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL("image/png");
+                    const imgProps = doc.getImageProperties(imgData);
+                    const pdfWidth = doc.internal.pageSize.getWidth() - 20; // Add margins (10mm on each side)
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    doc.addImage(imgData, "PNG", 10, 20, pdfWidth, pdfHeight); // Add image with margins
+                    doc.save("transaction_table.pdf");
+                }).catch(error => {
+                    alert("Error generating PDF. Check the console for details.");
+                    console.error("html2canvas error:", error);
+                });
+            };
+
+            window.logout = function () {
+                sessionStorage.removeItem("currentUser");
+                alert("You have been logged out.");
+            }
+
+            const sidebarEl = document.getElementById('sidebar');
+            const menuToggleBtn = document.getElementById('menuToggle');
+            const sidebarCloseBtn = document.getElementById('sidebarClose');
+            const overlayEl = document.getElementById('overlay');
+            const MOBILE_QUERY = window.matchMedia('(max-width: 992px)');
+
+            function openSidebar() {
+                if (!MOBILE_QUERY.matches) return;
+                sidebarEl.classList.add('open');
+                sidebarEl.setAttribute('aria-hidden', 'false');
+                overlayEl.hidden = false;
+                document.body.style.overflow = 'hidden';
+                menuToggleBtn.setAttribute('aria-expanded', 'true');
+                const icon = document.getElementById('menuIcon');
+                if (icon) { icon.classList.replace('bx-menu', 'bx-x'); }
+            }
+
+            function closeSidebar() {
+                sidebarEl.classList.remove('open');
+                sidebarEl.setAttribute('aria-hidden', 'true');
+                overlayEl.hidden = true;
+                document.body.style.overflow = '';
+                menuToggleBtn.setAttribute('aria-expanded', 'false');
+                const icon = document.getElementById('menuIcon');
+                if (icon) { icon.classList.replace('bx-x', 'bx-menu'); }
+            }
+
+            menuToggleBtn && menuToggleBtn.addEventListener('click', () => {
+                if (sidebarEl.classList.contains('open')) closeSidebar();
+                else openSidebar();
+            });
+
+            sidebarCloseBtn && sidebarCloseBtn.addEventListener('click', closeSidebar);
+
+            overlayEl && overlayEl.addEventListener('click', closeSidebar);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebarEl.classList.contains('open')) closeSidebar();
+            });
+
+            window.addEventListener('resize', () => {
+                if (!MOBILE_QUERY.matches) closeSidebar();
+            });
+
+            renderTable();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaCraft Expense Tracker</title>
+  <link rel="shortcut icon" href="image/m-craft.png" type="image/x-icon">
+
+  <!--for chart.js-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!--for boxicons-->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+  <!--for font awesome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+
+  <!-- MOBILE HEADER -->
+  <header class="mobile-header" id="mobileHeader">
+    <button id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+      <i class='bx bx-menu' id="menuIcon"></i>
+    </button>
+    <div class="brand">
+      <img src="image/meta.png" alt="MetaCraft logo">
+      <span>ᗰETᗩᑕᖇᗩᖴT</span>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <div class="side-container">
+    <div class="sidebar" id="sidebar" aria-hidden="true">
+      <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+        <i class='bx bx-x'></i>
+      </button>
+      <div class="profile-details">
+        <img src="image/user.jpg" id="profileImage" alt="profile image">
+        <div class="name" id="welcome">John Doe</div>
+      </div>
+      <ul class="nav-links">
+        <li>
+          <a href="index.html" class="linkbtn">
+            <i class='bx bxs-home' style="color: #a56dde;"></i>
+            <span class="link_name">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="linkbtn">
+            <i class='bx bxs-dashboard'style="color: #a56dde;"></i>
+            <span class="link_name">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="history.html" class="linkbtn">
+            <i class='bx bx-history'style="color: #a56dde;"></i>
+            <span class="link_name">History</span>
+          </a>
+        </li>
+        <li>
+          <a href="about.html" class="linkbtn">
+            <i class='bx bxs-user'style="color: #a56dde;"></i>
+            <span class="link_name">About</span>
+          </a>
+        </li>
+        <li>
+          <a href="MetacraftLogin.html" class="linkbtn" onclick="logout()">
+            <button class="Btn">
+              <div class="sign">
+                <svg viewBox="0 0 512 512">
+                  <path
+                    d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0-17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                  </path>
+                </svg>
+              </div>
+              <div class="text">Logout</div>
+            </button>
+          </a>
+        </li>
+        <li style="margin-top: auto; padding-bottom: 20px;">
+          <a href="#">
+            <img src="image/meta.png" class="btm-img">
+            <h3>ᗰETᗩᑕᖇᗩᖴT</h3>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="overlay" id="overlay" hidden></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <h1>Expense Tracker</h1>
+      <div class="summary">
+        <div>
+          <h3 style="color: #4caf50;"><i class="fa-solid fa-arrow-down"></i> Income</h3>
+          <p id="totalIncome">$0.00</p>
+        </div>
+        <div>
+          <h3 style="color: #f44336;"><i class='fa-solid fa-arrow-up'></i> Expense</h3>
+          <p id="totalExpense">$0.00</p>
+        </div>
+        <div>
+          <h3 style="color: #966aad;"><i class='fa-solid fa-wallet'></i> Balance</h3>
+          <p id="balance">$0.00</p>
+        </div>
+      </div>
+      <div class="container">
+        <form id="transactionform">
+          <input type="text" placeholder="Description" title="Enter your description" id="description" required>
+          <input type="number" id="amount" placeholder="Amount" title="Enter your amount" required min="0.01"
+            step="0.01">
+          <select id="type" title="Select transaction type">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select id="category" title="Select category">
+            <option value="Salary">Salary</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Bills">Bills</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Travel">Travel</option>
+            <option value="Rent">Rent</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Other">Other</option>
+          </select>
+          <button type="submit" class="btn button2">Add Transaction</button>
+        </form>
+
+        <h2 class="T-history">TRANSACTION HISTORY</h2>
+        <ul id="transactionList"></ul>
+
+        <div class="chart-container">
+          <canvas id="chart" aria-label="Expenses by category chart" role="img"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // ✅ Check if user is logged in
+      let currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+      if (!currentUser || !currentUser.email) {
+        alert("Please log in first.");
+        window.location.href = "MetacraftLogin.html";
+        return;
+      }
+
+      const form = document.getElementById('transactionform');
+      const description = document.getElementById('description');
+      const amount = document.getElementById('amount');
+      const type = document.getElementById('type');
+      const category = document.getElementById('category');
+      const transactionList = document.getElementById('transactionList');
+      const totalIncome = document.getElementById('totalIncome');
+      const totalExpense = document.getElementById('totalExpense');
+      const balance = document.getElementById('balance');
+      const profileImage = document.getElementById("profileImage");
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      let userIndex = users.findIndex(u => u.email === currentUser.email);
+      if (userIndex === -1) {
+        users.push(currentUser);
+        userIndex = users.length - 1;
+      }
+
+      if (!users[userIndex].history) users[userIndex].history = [];
+      let transactions = users[userIndex].history;
+
+      // Set welcome text
+      document.getElementById("welcome").innerText = `Hi, ${currentUser.name}`;
+
+      // Set profile image based on gender if available
+      if (currentUser.gender === "male") {
+        profileImage.src = "image/men.png";
+      } else if (currentUser.gender === "female") {
+        profileImage.src = "image/women.png";
+      } else {
+        profileImage.src = "image/user.jpg";
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!description.value || !amount.value) {
+          alert("Please fill out both description and amount.");
+          return;
+        }
+
+        const transaction = {
+          description: description.value,
+          amount: parseFloat(amount.value),
+          type: type.value,
+          category: category.value,
+          date: new Date().toLocaleDateString()
+        };
+
+        transactions.push(transaction);
+        users[userIndex].history = transactions;
+        localStorage.setItem("users", JSON.stringify(users));
+        sessionStorage.setItem("currentUser", JSON.stringify(users[userIndex]));
+
+        updateUI();
+        form.reset();
+      });
+
+      function updateUI() {
+        transactionList.innerHTML = '';
+
+        let income = 0;
+        let expense = 0;
+        const categoryTotals = {};
+
+        transactions.forEach((t) => {
+          const li = document.createElement('li');
+          li.className = 'txn';
+          const isIncome = t.type === 'income';
+
+          const desc = document.createElement('span');
+          desc.className = 'txn-desc';
+          desc.textContent = t.description;
+
+          const meta = document.createElement('span');
+          meta.className = 'txn-meta';
+          meta.textContent = `${t.date} • ${t.category}`;
+
+          const amount = document.createElement('strong');
+          amount.className = `txn-amount ${isIncome ? 'income' : 'expense'}`;
+          amount.textContent = `${isIncome ? '+' : '-'}$${t.amount.toFixed(2)}`;
+
+          const main = document.createElement('div');
+          main.className = 'txn-main';
+          main.append(desc, meta);
+
+          li.append(main, amount);
+          transactionList.appendChild(li);
+
+          if (isIncome) {
+            income += t.amount;
+          } else {
+            expense += t.amount;
+            categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
+          }
+        });
+
+        totalIncome.innerText = `$${income.toFixed(2)}`;
+        totalExpense.innerText = `$${expense.toFixed(2)}`;
+        balance.innerText = `$${(income - expense).toFixed(2)}`;
+
+        renderChart(categoryTotals);
+      }
+
+      let chartInstance = null;
+      function renderChart(data) {
+        const ctx = document.getElementById('chart').getContext('2d');
+        const labels = Object.keys(data);
+        const values = Object.values(data);
+
+        const backgroundColors = [
+          '#fad8f8', '#FF6384', '#c79acd', '#966aad',
+          '#52446d', '#7a4e8c', '#FF9F40', '#4BC0C0',
+          '#FFCD56', '#36A2EB', '#f47a60', '#6c5b7b', '#c06c84'
+        ];
+
+        if (chartInstance) {
+          chartInstance.data.labels = labels;
+          chartInstance.data.datasets[0].data = values;
+          chartInstance.data.datasets[0].backgroundColor = backgroundColors.slice(0, labels.length);
+          chartInstance.update();
+        } else {
+          chartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Expenses by Category',
+                data: values,
+                backgroundColor: backgroundColors.slice(0, labels.length),
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: {
+                    color: '#fad8f8'
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      let label = context.label || '';
+                      if (label) label += ': ';
+                      if (context.parsed !== null) {
+                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                      }
+                      return label;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+
+      window.logout = function () {
+        sessionStorage.removeItem("currentUser");
+        window.location.href = "MetacraftLogin.html";
+        alert("You have been logged out.");
+      }
+
+      // Sidebar toggle
+      const sidebarEl = document.getElementById('sidebar');
+      const menuToggleBtn = document.getElementById('menuToggle');
+      const sidebarCloseBtn = document.getElementById('sidebarClose');
+      const overlayEl = document.getElementById('overlay');
+      const MOBILE_QUERY = window.matchMedia('(max-width: 992px)');
+
+      function openSidebar() {
+        if (!MOBILE_QUERY.matches) return;
+        sidebarEl.classList.add('open');
+        sidebarEl.setAttribute('aria-hidden', 'false');
+        overlayEl.hidden = false;
+        document.body.style.overflow = 'hidden';
+        menuToggleBtn.setAttribute('aria-expanded', 'true');
+        const icon = document.getElementById('menuIcon');
+        if (icon) {
+          icon.classList.remove('bx-menu');
+          icon.classList.add('bx-x');
+        }
+      }
+
+      function closeSidebar() {
+        sidebarEl.classList.remove('open');
+        sidebarEl.setAttribute('aria-hidden', 'true');
+        overlayEl.hidden = true;
+        document.body.style.overflow = '';
+        menuToggleBtn.setAttribute('aria-expanded', 'false');
+        const icon = document.getElementById('menuIcon');
+        if (icon) {
+          icon.classList.remove('bx-x');
+          icon.classList.add('bx-menu');
+        }
+      }
+
+      menuToggleBtn && menuToggleBtn.addEventListener('click', () => {
+        if (sidebarEl.classList.contains('open')) closeSidebar();
+        else openSidebar();
+      });
+
+      sidebarCloseBtn && sidebarCloseBtn.addEventListener('click', closeSidebar);
+
+      overlayEl && overlayEl.addEventListener('click', closeSidebar);
+
+      // Escape closes the drawer; resizing past the breakpoint resets state
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebarEl.classList.contains('open')) closeSidebar();
+      });
+
+      window.addEventListener('resize', () => {
+        if (!MOBILE_QUERY.matches) closeSidebar();
+      });
+
+      // Initial Load
+      updateUI();
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="shortcut icon" href="image/m-craft.png" type="image/x-icon">
+    <!-- for boxicons -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body class="auth-page">
+
+    <div class="background" aria-hidden="true">
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+    </div>
+
+    <div class="container">
+        <form onsubmit="loginUser(event)">
+            <h1>Login</h1>
+
+            <div class="field">
+                <label for="loginEmail">E-mail</label>
+                <input type="email" id="loginEmail" required title="enter your email" autocomplete="email"
+                    placeholder="you@example.com">
+            </div>
+
+            <div class="field">
+                <label for="loginPass">Password</label>
+                <div class="password-wrap">
+                    <input type="password" id="loginPass" required title="enter your password"
+                        autocomplete="current-password" placeholder="Your password">
+                    <button type="button" id="eye" aria-label="Show password" aria-pressed="false">
+                        <i class="bx bx-show"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit">Login</button>
+            <p class="have-account">Don't have an account? <a href="MetacraftReg.html" class="signup-link">Sign
+                    Up</a></p>
+        </form>
+    </div>
+
+    <script>
+        //for password show & hide toogle.....
+
+        const pass = document.querySelector("#loginPass");
+        const eyeBtn = document.querySelector("#eye");
+        const eyeIcon = eyeBtn.querySelector("i");
+
+        eyeBtn.addEventListener("click", () => {
+            const show = pass.type === "password";
+            pass.type = show ? "text" : "password";
+            eyeIcon.className = show ? "bx bx-hide" : "bx bx-show";
+            eyeBtn.setAttribute("aria-pressed", String(show));
+            eyeBtn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+        });
+
+        //check data from localstorage for login
+
+        function loginUser(event) {
+            event.preventDefault();
+
+            let email = document.getElementById("loginEmail").value.trim(); // trim can removed extra space
+            let password = document.getElementById("loginPass").value;
+
+            // to target and get all user form localstorage
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            //to found macthing user in localstorage if already axists
+            let foundUser = users.find(user => user.email === email && user.password === password);
+
+            if (foundUser) {
+                //save user in session storage for dashboard
+                sessionStorage.setItem("currentUser", JSON.stringify(foundUser));
+
+                //for persistent login tracking
+                localStorage.setItem("loggedinEmail", email);
+
+                alert("Login Successfully!");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Oops! Looks like your email or password is wrong. New here? Sign up to get started!");
+
+            }
+
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>

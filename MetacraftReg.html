@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="shortcut icon" href="image/m-craft.png" type="image/x-icon">
+    <!--for boxicons-->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/registration.css">
+</head>
+
+<body class="auth-page">
+    <div class="background" aria-hidden="true">
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+    </div>
+
+    <div class="container">
+        <form onsubmit="registerUser(event)">
+            <h2>CREATE NEW ACCOUNT</h2>
+
+            <div class="field">
+                <label for="username">Name</label>
+                <input type="text" id="username" required pattern="[A-Za-z\s]{3,}" placeholder="Your full name"
+                    title="Name should contain only letters and spaces, minimum 3 characters" autocomplete="name">
+            </div>
+
+            <div class="field">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" required title="Enter a valid email address" placeholder="you@example.com"
+                    autocomplete="email">
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="password-wrap">
+                    <input type="password" id="password" required placeholder="Your password"
+                        autocomplete="new-password"
+                        pattern="^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*_+])[0-9A-Za-z!@#$%^&*_+]{8,15}$"
+                        title="Password must be 8-15 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character">
+                    <button type="button" id="eye" aria-label="Show password" aria-pressed="false">
+                        <i class="bx bx-show"></i>
+                    </button>
+                </div>
+            </div>
+
+            <fieldset class="gender">
+                <legend>Gender</legend>
+                <div class="gender-options">
+                    <label class="gender-label">
+                        <input type="radio" name="gender" value="male" required> Male
+                    </label>
+                    <label class="gender-label">
+                        <input type="radio" name="gender" value="female" required> Female
+                    </label>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="submit">Register</button>
+
+            <p class="have-account">Already have an account? <a href="MetacraftLogin.html" class="login-link">Login</a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        //for password show & hide toogle.....
+
+        const pass = document.querySelector("#password");
+        const eyeBtn = document.querySelector("#eye");
+        const eyeIcon = eyeBtn.querySelector("i");
+
+        eyeBtn.addEventListener("click", () => {
+            const show = pass.type === "password";
+            pass.type = show ? "text" : "password";
+            eyeIcon.className = show ? "bx bx-hide" : "bx bx-show";
+            eyeBtn.setAttribute("aria-pressed", String(show));
+            eyeBtn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+        });
+
+        //for data storing on local storage.....
+
+        function registerUser(event) {
+            event.preventDefault();//for stop user to redirect login page with out complete all process.....
+
+            let name = document.getElementById("username").value.trim(); // trim can removed extra space
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value;
+            let gender = document.querySelector('input[name="gender"]:checked').value;
+
+            //get existing user from localstorage.....
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            //Check if this email is already exists
+            let exists = users.find(user => user.email === email);
+            if (exists) {
+                alert("This email is already registered. Try logging in.");
+                return;
+            }
+
+            //create new users object
+            let newuser = {
+                name: name,
+                email: email,
+                password: password,
+                gender: gender,
+                history: []
+            };
+
+            //add new user and save to localstorege
+            users.push(newuser);
+            localStorage.setItem("users", JSON.stringify(users));
+
+            alert("Registered Successfully! Now Login.");
+            window.location.href = "MetacraftLogin.html"; // redirect to ligin page
+        }
+
+    </script>
+</body>
+
+</html>
